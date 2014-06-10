@@ -1,3 +1,5 @@
 class Student < ActiveRecord::Base
-  validate :name, presence: true
+  validates :name, presence: true
+  has_many :towns_people
+  has_many :games, through: :towns_people
 end

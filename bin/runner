@@ -1,0 +1,74 @@
+#!/usr/bin/env ruby
+
+require_relative '../config/environment'
+
+puts "Welcome to the Mafia Game. New Game or continue?"
+puts "(N)ew or (C)ontinue:"
+
+response = gets.strip
+
+case response
+when /^n/i
+  puts "Please enter a label for this game:"
+  label = gets.strip
+  game = Game.create(label:label)
+when /^c/i
+  puts "Which game would you like to continue?"
+  puts Game.pluck(:label)
+  label = gets.strip
+  game = Game.find_by label: label
+else  
+  puts "Assuming you want to start a new game..."
+  puts "Please provide a label for your game:"
+  label = gets.chomp
+  game = Game.create label: label
+end
+
+puts "\e[H\e[2J"
+puts "Your towns people are being terrorized by the mafia. The townspeople have had enough and are out for blood"
+
+loop do
+  murdered = game.mafia_kill
+  puts "Last night #{murdered} was killed."
+
+  puts "Who do you want to kill?!"
+  puts game.survivors
+  puts "Enter Towns Person to murder: "
+  name = gets.chomp
+  mafia_status = game.mob_kill(name)
+
+  break if game.over?
+
+  puts "\e[H\e[2J"
+  if mafia_status
+    puts "#{name} was MAFIA!"
+  else
+    puts "#{name} was not MAFIA!"
+  end
+end
+
+if game.mafia_win?
+  puts "Mafia won!"
+  puts "Mafia Members #{game.mafia_members}"
+else
+  puts "You killed the Mafia!"
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

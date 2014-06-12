@@ -5,4 +5,6 @@ gem 'activerecord', require: 'active_record'
 gem 'pg'
 gem 'pry'
 
+gem 'sinatra'
+
 gem 'rspec'
